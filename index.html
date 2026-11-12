@@ -344,7 +344,7 @@
     </div>
 
     <script>
-        function checkAgent() {
+        async function checkAgent() {
             const input = document.getElementById('agentInput').value.trim();
             const resultCard = document.getElementById('resultCard');
             const searchBox = document.getElementById('searchBox');
@@ -357,30 +357,59 @@
             searchBox.classList.add('scanning');
             resultCard.style.display = 'none';
 
-            setTimeout(() => {
+            try {
+                // Отправляем реальный запрос на наш CloudPub туннель
+                const response = await fetch('https://tremulously-tender-gyrfalcon.cloudpub.ru/check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ agent_address: input })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
                 searchBox.classList.remove('scanning');
                 resultCard.style.display = 'block';
-                document.getElementById('resAddress').innerText = input;
+                
+                document.getElementById('resAddress').innerText = data.agent || input;
                 
                 const badge = document.getElementById('statusBadge');
                 badge.className = 'status-badge';
                 
-                const statuses = [
-                    { text: "Safe (Clean)", class: "status-clean", color: "#4ade80" },
-                    { text: "Suspicious", class: "status-suspicious", color: "#facc15" },
-                    { text: "High Risk", class: "status-highrisk", color: "#f87171" }
-                ];
-                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                let statusText, statusClass, statusColor;
+                
+                if (data.wallet_status === 'Clean') {
+                    statusText = "Safe (Clean)";
+                    statusClass = "status-clean";
+                    statusColor = "#4ade80";
+                } else if (data.wallet_status === 'Suspicious') {
+                    statusText = "Suspicious";
+                    statusClass = "status-suspicious";
+                    statusColor = "#facc15";
+                } else {
+                    statusText = "High Risk";
+                    statusClass = "status-highrisk";
+                    statusColor = "#f87171";
+                }
 
-                badge.innerText = randomStatus.text;
-                badge.className = `status-badge ${randomStatus.class}`;
+                badge.innerText = statusText;
+                badge.className = `status-badge ${statusClass}`;
                 
-                document.getElementById('resWallet').innerText = randomStatus.text.split(' ')[0];
-                document.getElementById('resWallet').style.color = randomStatus.color;
+                document.getElementById('resWallet').innerText = data.wallet_status;
+                document.getElementById('resWallet').style.color = statusColor;
                 
-                const now = new Date();
-                document.getElementById('resDate').innerText = now.toLocaleString('en-US');
-            }, 2000);
+                document.getElementById('resDate').innerText = data.added_at || new Date().toLocaleString('en-US');
+                
+            } catch (error) {
+                searchBox.classList.remove('scanning');
+                alert("Connection error. Make sure the agent is running and the tunnel is active.");
+                console.error(error);
+            }
         }
     </script>
 </body>
