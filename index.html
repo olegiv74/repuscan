@@ -10,23 +10,65 @@
             margin: 0;
             padding: 0;
             background-color: #0f172a;
-            /* Красивый технологичный фон из точек */
             background-image: radial-gradient(#334155 1px, transparent 1px);
             background-size: 30px 30px;
             color: #ffffff;
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Верхняя панель навигации */
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-connect {
+            background: transparent;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-connect:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        /* Основной контент */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 80px 20px 40px;
             text-align: center;
         }
         .container {
             max-width: 700px;
-            padding: 40px;
             width: 100%;
+            padding: 40px;
             box-sizing: border-box;
-            background: rgba(15, 23, 42, 0.8); /* Легкая подложка, чтобы фон не мешал читать текст */
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(5px);
             border-radius: 24px;
             border: 1px solid #1e293b;
@@ -57,10 +99,11 @@
             color: #94a3b8;
             margin-bottom: 40px;
         }
+        
         .search-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             position: relative;
         }
         input[type="text"] {
@@ -77,8 +120,6 @@
         input[type="text"]:focus {
             border-color: #38bdf8;
         }
-        
-        /* Анимация сканирования */
         .scan-line {
             position: absolute;
             top: 2px;
@@ -102,7 +143,7 @@
             100% { left: 100%; width: 0; opacity: 0; }
         }
 
-        button {
+        button.btn-check {
             padding: 18px 35px;
             font-size: 1.1rem;
             font-weight: bold;
@@ -114,12 +155,37 @@
             transition: background 0.3s, transform 0.1s;
             z-index: 1;
         }
-        button:hover {
+        button.btn-check:hover {
             background: #818cf8;
         }
-        button:active {
+        button.btn-check:active {
             transform: scale(0.98);
         }
+
+        /* Индикатор Live */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Карточка результата */
         .result-card {
             background: #1e293b;
             border-radius: 16px;
@@ -154,57 +220,118 @@
         }
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #94a3b8; }
+
+        /* Блок для разработчиков */
+        .dev-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+        }
+        .dev-title {
+            font-size: 1.1rem;
+            color: #e2e8f0;
+            margin-bottom: 10px;
+        }
+        .dev-text {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        .btn-dev {
+            background: transparent;
+            color: #818cf8;
+            border: 1px solid #818cf8;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-dev:hover {
+            background: #818cf8;
+            color: #0f172a;
+        }
+        
         .footer {
             margin-top: 40px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #475569;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo-container">
-            <!-- Стильная SVG-иконка (щит со сканером) -->
-            <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M8 12L11 15L16 9" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <defs>
-                    <linearGradient id="paint0_linear" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#38bdf8"/>
-                        <stop offset="1" stop-color="#818cf8"/>
-                    </linearGradient>
-                </defs>
+    <!-- Верхняя панель -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 12L11 15L16 9" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <div class="logo-text">RepuScanAI</div>
+            RepuScanAI
         </div>
-        
-        <div class="subtitle">Trust Layer for the AI Agent Ecosystem</div>
-        
-        <div class="search-box" id="searchBox">
-            <input type="text" id="agentInput" placeholder="Enter agent address (agent1q...)">
-            <div class="scan-line"></div>
-            <button onclick="checkAgent()">Check</button>
-        </div>
+        <button class="btn-connect">Connect Wallet</button>
+    </nav>
 
-        <div id="resultCard" class="result-card">
-            <div id="statusBadge" class="status-badge"></div>
-            <h3 style="margin-top: 0; color: #e2e8f0;">Scan Result</h3>
-            <div class="info-row">
-                <span class="info-label">Agent Address:</span>
-                <span id="resAddress" style="word-break: break-all; max-width: 60%; text-align: right;">-</span>
+    <!-- Основной контент -->
+    <div class="main-content">
+        <div class="container">
+            <div class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 12L11 15L16 9" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#38bdf8"/>
+                            <stop offset="1" stop-color="#818cf8"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="logo-text">RepuScanAI</div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Wallet Status:</span>
-                <span id="resWallet">-</span>
+            
+            <div class="subtitle">Trust Layer for the AI Agent Ecosystem</div>
+            
+            <div class="search-box" id="searchBox">
+                <input type="text" id="agentInput" placeholder="Enter agent address (agent1q...)">
+                <div class="scan-line"></div>
+                <button class="btn-check" onclick="checkAgent()">Check</button>
             </div>
-            <div class="info-row">
-                <span class="info-label">Scan Date:</span>
-                <span id="resDate">-</span>
-            </div>
-        </div>
 
-        <div class="footer">
-            © 2026 RepuScanAI. All rights reserved.
+            <!-- Индикатор Live -->
+            <div class="live-indicator">
+                <div class="dot"></div>
+                Scanner is live. 1,245 agents in database
+            </div>
+
+            <div id="resultCard" class="result-card">
+                <div id="statusBadge" class="status-badge"></div>
+                <h3 style="margin-top: 0; color: #e2e8f0;">Scan Result</h3>
+                <div class="info-row">
+                    <span class="info-label">Agent Address:</span>
+                    <span id="resAddress" style="word-break: break-all; max-width: 60%; text-align: right;">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Wallet Status:</span>
+                    <span id="resWallet">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Scan Date:</span>
+                    <span id="resDate">-</span>
+                </div>
+            </div>
+
+            <!-- Блок для разработчиков -->
+            <div class="dev-section">
+                <div class="dev-title">Are you an AI Agent developer?</div>
+                <div class="dev-text">Get your RepuScan Verified Badge and gain the trust of your users.</div>
+                <button class="btn-dev">Apply for Verification</button>
+            </div>
+
+            <div class="footer">
+                © 2026 RepuScanAI. All rights reserved.
+            </div>
         </div>
     </div>
 
@@ -219,22 +346,17 @@
                 return;
             }
 
-            // Включаем анимацию сканирования
             searchBox.classList.add('scanning');
-            resultCard.style.display = 'none'; // Скрываем старый результат
+            resultCard.style.display = 'none';
 
             setTimeout(() => {
-                // Останавливаем анимацию
                 searchBox.classList.remove('scanning');
-                
-                // Показываем результат
                 resultCard.style.display = 'block';
                 document.getElementById('resAddress').innerText = input;
                 
                 const badge = document.getElementById('statusBadge');
                 badge.className = 'status-badge';
                 
-                // Имитация случайного статуса
                 const statuses = [
                     { text: "Safe (Clean)", class: "status-clean", color: "#4ade80" },
                     { text: "Suspicious", class: "status-suspicious", color: "#facc15" },
@@ -250,7 +372,7 @@
                 
                 const now = new Date();
                 document.getElementById('resDate').innerText = now.toLocaleString('en-US');
-            }, 2000); // 2 секунды на анимацию
+            }, 2000);
         }
     </script>
 </body>
