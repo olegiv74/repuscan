@@ -12,69 +12,185 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
         }
         .container {
-            max-width: 600px;
+            max-width: 700px;
             padding: 40px;
+            width: 100%;
+            box-sizing: border-box;
         }
-        h1 {
-            font-size: 3rem;
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
             margin-bottom: 10px;
             background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
-        p {
+        .subtitle {
             font-size: 1.2rem;
             color: #94a3b8;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            margin-bottom: 40px;
         }
-        .badge {
-            display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            color: #38bdf8;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
+        .search-box {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
         }
-        .btn {
-            display: inline-block;
+        input[type="text"] {
+            flex: 1;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: 2px solid #334155;
+            background: #1e293b;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #38bdf8;
+        }
+        button {
+            padding: 18px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            border: none;
             background: #38bdf8;
             color: #0f172a;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: background 0.3s;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
         }
-        .btn:hover {
+        button:hover {
             background: #818cf8;
         }
+        button:active {
+            transform: scale(0.98);
+        }
+        .result-card {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: left;
+            border: 1px solid #334155;
+            display: none; /* Скрыто по умолчанию */
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .status-clean { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
+        .status-suspicious { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308; }
+        .status-highrisk { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #94a3b8; }
         .footer {
-            margin-top: 50px;
-            font-size: 0.8rem;
+            margin-top: 60px;
+            font-size: 0.9rem;
             color: #475569;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="badge">🚀 Скоро запуск</div>
-        <h1>RepuScanAI</h1>
-        <p>Слой доверия для мира ИИ-агентов. Мы сканируем репутацию, проверяем кошельки и выдаем вердикты, чтобы вы могли безопасно строить свой бизнес в экосистеме Fetch.ai.</p>
-        <a href="mailto:hello@repuscan.xyz" class="btn">Связаться с нами</a>
+        <div class="logo">RepuScanAI</div>
+        <div class="subtitle">Слой доверия для мира ИИ-агентов</div>
+        
+        <div class="search-box">
+            <input type="text" id="agentInput" placeholder="Введите адрес агента (agent1q...)">
+            <button onclick="checkAgent()">Проверить</button>
+        </div>
+
+        <!-- Карточка результата (скрыта по умолчанию) -->
+        <div id="resultCard" class="result-card">
+            <div id="statusBadge" class="status-badge"></div>
+            <h3 style="margin-top: 0; color: #e2e8f0;">Результат проверки</h3>
+            <div class="info-row">
+                <span class="info-label">Адрес агента:</span>
+                <span id="resAddress" style="word-break: break-all; max-width: 60%; text-align: right;">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Статус кошелька:</span>
+                <span id="resWallet">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Дата проверки:</span>
+                <span id="resDate">-</span>
+            </div>
+        </div>
+
         <div class="footer">
             © 2026 RepuScanAI. Все права защищены.
         </div>
     </div>
+
+    <script>
+        // Имитация работы (пока без реального подключения к агенту)
+        function checkAgent() {
+            const input = document.getElementById('agentInput').value.trim();
+            const resultCard = document.getElementById('resultCard');
+            
+            if (!input) {
+                alert("Пожалуйста, введите адрес агента.");
+                return;
+            }
+
+            // Показываем карточку
+            resultCard.style.display = 'block';
+
+            // Имитация загрузки (в будущем здесь будет реальный запрос к API)
+            document.getElementById('resAddress').innerText = input;
+            document.getElementById('resWallet').innerText = "Загрузка...";
+            document.getElementById('resDate').innerText = "Загрузка...";
+            
+            const badge = document.getElementById('statusBadge');
+            badge.className = 'status-badge';
+            badge.innerText = "Анализ...";
+
+            // Через 1.5 секунды показываем "результат" (имитация)
+            setTimeout(() => {
+                // Случайный статус для демонстрации
+                const statuses = [
+                    { text: "Безопасен (Clean)", class: "status-clean", color: "#4ade80" },
+                    { text: "Подозрительный (Suspicious)", class: "status-suspicious", color: "#facc15" },
+                    { text: "Опасен (High Risk)", class: "status-highrisk", color: "#f87171" }
+                ];
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+                badge.innerText = randomStatus.text;
+                badge.className = `status-badge ${randomStatus.class}`;
+                
+                document.getElementById('resWallet').innerText = randomStatus.text.split(' ')[0];
+                document.getElementById('resWallet').style.color = randomStatus.color;
+                
+                const now = new Date();
+                document.getElementById('resDate').innerText = now.toLocaleString('ru-RU');
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
