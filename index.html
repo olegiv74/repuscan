@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RepuScanAI — Проверка безопасности ИИ-агентов</title>
+    <title>RepuScanAI — AI Agent Security Check</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +18,6 @@
             min-height: 100vh;
         }
         
-        /* Верхняя панель навигации */
         .navbar {
             width: 100%;
             display: flex;
@@ -53,7 +52,6 @@
             color: #0f172a;
         }
 
-        /* Основной контент */
         .main-content {
             flex: 1;
             display: flex;
@@ -95,7 +93,6 @@
             letter-spacing: -1px;
         }
         
-        /* Новый, понятный заголовок */
         .main-headline {
             font-size: 1.5rem;
             color: #e2e8f0;
@@ -171,7 +168,6 @@
             transform: scale(0.98);
         }
 
-        /* Индикатор Live */
         .live-indicator {
             display: flex;
             align-items: center;
@@ -194,7 +190,6 @@
             100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
 
-        /* Карточка результата */
         .result-card {
             background: #1e293b;
             border-radius: 16px;
@@ -233,7 +228,6 @@
         .info-row:last-child { border-bottom: none; }
         .info-label { color: #94a3b8; }
 
-        /* Блок для разработчиков */
         .dev-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -278,7 +272,6 @@
     </style>
 </head>
 <body>
-    <!-- Верхняя панель -->
     <nav class="navbar">
         <div class="nav-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -290,7 +283,6 @@
         <button class="btn-connect">Connect Wallet</button>
     </nav>
 
-    <!-- Основной контент -->
     <div class="main-content">
         <div class="container">
             <div class="logo-container">
@@ -307,49 +299,46 @@
                 <div class="logo-text">RepuScanAI</div>
             </div>
             
-            <!-- Новый, понятный заголовок -->
             <div class="main-headline">
-                Узнайте, безопасен ли ИИ-агент, прежде чем доверить ему свои деньги или данные.
+                Choose a safe AI agent before trusting it with your money or data.
             </div>
             
             <div class="search-box" id="searchBox">
-                <input type="text" id="agentInput" placeholder="Введите адрес агента (agent1q...)">
+                <input type="text" id="agentInput" placeholder="Enter agent address (agent1q...)">
                 <div class="scan-line"></div>
-                <button class="btn-check" onclick="checkAgent()">Проверить</button>
+                <button class="btn-check" onclick="checkAgent()">Check</button>
             </div>
 
-            <!-- Индикатор Live -->
             <div class="live-indicator">
                 <div class="dot"></div>
-                Сканер работает. В базе уже 1,245 проверенных агентов.
+                Scanner is live. 1,245 agents verified in database.
             </div>
 
             <div id="resultCard" class="result-card">
                 <div id="statusBadge" class="status-badge"></div>
-                <h3 style="margin-top: 0; color: #e2e8f0;">Результат проверки</h3>
+                <h3 style="margin-top: 0; color: #e2e8f0;">Scan Result</h3>
                 <div class="info-row">
-                    <span class="info-label">Адрес агента:</span>
+                    <span class="info-label">Agent Address:</span>
                     <span id="resAddress" style="word-break: break-all; max-width: 60%; text-align: right;">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Статус кошелька:</span>
+                    <span class="info-label">Wallet Status:</span>
                     <span id="resWallet">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Дата проверки:</span>
+                    <span class="info-label">Scan Date:</span>
                     <span id="resDate">-</span>
                 </div>
             </div>
 
-            <!-- Блок для разработчиков -->
             <div class="dev-section">
-                <div class="dev-title">Вы создаете ИИ-агента?</div>
-                <div class="dev-text">Получите значок RepuScan Verified, чтобы клиенты доверяли вам с первого взгляда.</div>
-                <button class="btn-dev">Подать заявку на проверку</button>
+                <div class="dev-title">Are you an AI Agent developer?</div>
+                <div class="dev-text">Get the RepuScan Verified badge to earn your clients' trust at first sight.</div>
+                <button class="btn-dev">Apply for Verification</button>
             </div>
 
             <div class="footer">
-                © 2026 RepuScanAI. Все права защищены.
+                © 2026 RepuScanAI. All rights reserved.
             </div>
         </div>
     </div>
@@ -361,7 +350,7 @@
             const searchBox = document.getElementById('searchBox');
             
             if (!input) {
-                alert("Пожалуйста, введите адрес агента.");
+                alert("Please enter an agent address.");
                 return;
             }
 
@@ -377,9 +366,9 @@
                 badge.className = 'status-badge';
                 
                 const statuses = [
-                    { text: "Безопасен (Clean)", class: "status-clean", color: "#4ade80" },
-                    { text: "Подозрительный (Suspicious)", class: "status-suspicious", color: "#facc15" },
-                    { text: "Опасен (High Risk)", class: "status-highrisk", color: "#f87171" }
+                    { text: "Safe (Clean)", class: "status-clean", color: "#4ade80" },
+                    { text: "Suspicious", class: "status-suspicious", color: "#facc15" },
+                    { text: "High Risk", class: "status-highrisk", color: "#f87171" }
                 ];
                 const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
 
@@ -390,7 +379,7 @@
                 document.getElementById('resWallet').style.color = randomStatus.color;
                 
                 const now = new Date();
-                document.getElementById('resDate').innerText = now.toLocaleString('ru-RU');
+                document.getElementById('resDate').innerText = now.toLocaleString('en-US');
             }, 2000);
         }
     </script>
