@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RepuScanAI — AI Agent Reputation Scanner</title>
+    <title>RepuScanAI — Проверка безопасности ИИ-агентов</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -60,16 +60,16 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 80px 20px 40px;
+            padding: 100px 20px 40px;
             text-align: center;
         }
         .container {
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             padding: 40px;
             box-sizing: border-box;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
             border-radius: 24px;
             border: 1px solid #1e293b;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -78,33 +78,42 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .logo-svg {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             margin-right: 15px;
             filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
         }
         .logo-text {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: bold;
             background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
         }
-        .subtitle {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 40px;
-        }
         
+        /* Новый, понятный заголовок */
+        .main-headline {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .search-box {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
             position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         input[type="text"] {
             flex: 1;
@@ -168,9 +177,9 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #94a3b8;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .dot {
             width: 8px;
@@ -190,11 +199,14 @@
             background: #1e293b;
             border-radius: 16px;
             padding: 30px;
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: left;
             border: 1px solid #334155;
             display: none;
             animation: fadeIn 0.5s;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -223,18 +235,22 @@
 
         /* Блок для разработчиков */
         .dev-section {
-            margin-top: 50px;
+            margin-top: 40px;
             padding-top: 30px;
             border-top: 1px solid #1e293b;
             text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .dev-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #e2e8f0;
             margin-bottom: 10px;
+            font-weight: bold;
         }
         .dev-text {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #94a3b8;
             margin-bottom: 20px;
         }
@@ -242,9 +258,9 @@
             background: transparent;
             color: #818cf8;
             border: 1px solid #818cf8;
-            padding: 10px 25px;
+            padding: 12px 25px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -255,7 +271,7 @@
         }
         
         .footer {
-            margin-top: 40px;
+            margin-top: 30px;
             font-size: 0.8rem;
             color: #475569;
         }
@@ -291,46 +307,49 @@
                 <div class="logo-text">RepuScanAI</div>
             </div>
             
-            <div class="subtitle">Trust Layer for the AI Agent Ecosystem</div>
+            <!-- Новый, понятный заголовок -->
+            <div class="main-headline">
+                Узнайте, безопасен ли ИИ-агент, прежде чем доверить ему свои деньги или данные.
+            </div>
             
             <div class="search-box" id="searchBox">
-                <input type="text" id="agentInput" placeholder="Enter agent address (agent1q...)">
+                <input type="text" id="agentInput" placeholder="Введите адрес агента (agent1q...)">
                 <div class="scan-line"></div>
-                <button class="btn-check" onclick="checkAgent()">Check</button>
+                <button class="btn-check" onclick="checkAgent()">Проверить</button>
             </div>
 
             <!-- Индикатор Live -->
             <div class="live-indicator">
                 <div class="dot"></div>
-                Scanner is live. 1,245 agents in database
+                Сканер работает. В базе уже 1,245 проверенных агентов.
             </div>
 
             <div id="resultCard" class="result-card">
                 <div id="statusBadge" class="status-badge"></div>
-                <h3 style="margin-top: 0; color: #e2e8f0;">Scan Result</h3>
+                <h3 style="margin-top: 0; color: #e2e8f0;">Результат проверки</h3>
                 <div class="info-row">
-                    <span class="info-label">Agent Address:</span>
+                    <span class="info-label">Адрес агента:</span>
                     <span id="resAddress" style="word-break: break-all; max-width: 60%; text-align: right;">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Wallet Status:</span>
+                    <span class="info-label">Статус кошелька:</span>
                     <span id="resWallet">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Scan Date:</span>
+                    <span class="info-label">Дата проверки:</span>
                     <span id="resDate">-</span>
                 </div>
             </div>
 
             <!-- Блок для разработчиков -->
             <div class="dev-section">
-                <div class="dev-title">Are you an AI Agent developer?</div>
-                <div class="dev-text">Get your RepuScan Verified Badge and gain the trust of your users.</div>
-                <button class="btn-dev">Apply for Verification</button>
+                <div class="dev-title">Вы создаете ИИ-агента?</div>
+                <div class="dev-text">Получите значок RepuScan Verified, чтобы клиенты доверяли вам с первого взгляда.</div>
+                <button class="btn-dev">Подать заявку на проверку</button>
             </div>
 
             <div class="footer">
-                © 2026 RepuScanAI. All rights reserved.
+                © 2026 RepuScanAI. Все права защищены.
             </div>
         </div>
     </div>
@@ -342,7 +361,7 @@
             const searchBox = document.getElementById('searchBox');
             
             if (!input) {
-                alert("Please enter an agent address.");
+                alert("Пожалуйста, введите адрес агента.");
                 return;
             }
 
@@ -358,9 +377,9 @@
                 badge.className = 'status-badge';
                 
                 const statuses = [
-                    { text: "Safe (Clean)", class: "status-clean", color: "#4ade80" },
-                    { text: "Suspicious", class: "status-suspicious", color: "#facc15" },
-                    { text: "High Risk", class: "status-highrisk", color: "#f87171" }
+                    { text: "Безопасен (Clean)", class: "status-clean", color: "#4ade80" },
+                    { text: "Подозрительный (Suspicious)", class: "status-suspicious", color: "#facc15" },
+                    { text: "Опасен (High Risk)", class: "status-highrisk", color: "#f87171" }
                 ];
                 const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
 
@@ -371,7 +390,7 @@
                 document.getElementById('resWallet').style.color = randomStatus.color;
                 
                 const now = new Date();
-                document.getElementById('resDate').innerText = now.toLocaleString('en-US');
+                document.getElementById('resDate').innerText = now.toLocaleString('ru-RU');
             }, 2000);
         }
     </script>
