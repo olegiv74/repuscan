@@ -218,6 +218,19 @@
         .status-clean { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; }
         .status-suspicious { background: rgba(234, 179, 8, 0.2); color: #facc15; border: 1px solid #eab308; }
         .status-highrisk { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+        
+        .verified-badge {
+            display: none; /* По умолчанию скрыт */
+            background: rgba(34, 197, 94, 0.2); 
+            color: #4ade80; 
+            border: 1px solid #22c55e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
         .info-row {
             display: flex;
             justify-content: space-between;
@@ -270,72 +283,14 @@
             color: #475569;
         }
 
-        /* Стили для модального окна (формы заявки) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background-color: #1e293b;
-            margin: 15% auto;
-            padding: 30px;
-            border: 1px solid #334155;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 500px;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .modal-content h2 {
-            margin-top: 0;
-            color: #38bdf8;
-        }
-        .modal-content label {
-            display: block;
-            margin-top: 15px;
-            color: #cbd5e1;
-            font-size: 0.9rem;
-        }
-        .modal-content input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: white;
-            box-sizing: border-box;
-        }
-        .modal-actions {
-            margin-top: 25px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        .btn-cancel {
-            background: transparent;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .btn-submit {
-            background: #38bdf8;
-            color: #0f172a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #1e293b; margin: 15% auto; padding: 30px; border: 1px solid #334155; border-radius: 16px; width: 90%; max-width: 500px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .modal-content h2 { margin-top: 0; color: #38bdf8; }
+        .modal-content label { display: block; margin-top: 15px; color: #cbd5e1; font-size: 0.9rem; }
+        .modal-content input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        .modal-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .btn-submit { background: #38bdf8; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -382,7 +337,10 @@
             </div>
 
             <div id="resultCard" class="result-card">
-                <div id="statusBadge" class="status-badge"></div>
+                <div>
+                    <span id="statusBadge" class="status-badge"></span>
+                    <span id="verifiedBadge" class="verified-badge">✅ RepuScan Verified</span>
+                </div>
                 <h3 style="margin-top: 0; color: #e2e8f0;">Scan Result</h3>
                 <div class="info-row">
                     <span class="info-label">Agent Address:</span>
@@ -410,18 +368,14 @@
         </div>
     </div>
 
-    <!-- Модальное окно для заявки -->
     <div id="applyModal" class="modal">
         <div class="modal-content">
             <h2>Apply for Verification</h2>
             <p style="color: #94a3b8; font-size: 0.9rem;">Submit your AI agent details. We will review your application and contact you.</p>
-            
             <label for="applyAgent">Agent Address:</label>
             <input type="text" id="applyAgent" placeholder="agent1q...">
-            
             <label for="applyEmail">Your Email:</label>
             <input type="email" id="applyEmail" placeholder="you@example.com">
-            
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Cancel</button>
                 <button class="btn-submit" onclick="submitApplication()">Submit</button>
@@ -434,14 +388,13 @@
             const input = document.getElementById('agentInput').value.trim();
             const resultCard = document.getElementById('resultCard');
             const searchBox = document.getElementById('searchBox');
+            const verifiedBadge = document.getElementById('verifiedBadge');
             
-            if (!input) {
-                alert("Please enter an agent address.");
-                return;
-            }
+            if (!input) { alert("Please enter an agent address."); return; }
 
             searchBox.classList.add('scanning');
             resultCard.style.display = 'none';
+            verifiedBadge.style.display = 'none'; // Скрываем бейдж перед новым поиском
 
             try {
                 const response = await fetch('https://tally-assertive-peafowl.cloudpub.ru/check', {
@@ -474,6 +427,11 @@
                 document.getElementById('resWallet').innerText = data.wallet_status;
                 document.getElementById('resWallet').style.color = statusColor;
                 document.getElementById('resDate').innerText = data.added_at || new Date().toLocaleString('en-US');
+
+                // Показываем бейдж "Verified", если агент верифицирован
+                if (data.verified === true) {
+                    verifiedBadge.style.display = 'inline-block';
+                }
                 
             } catch (error) {
                 searchBox.classList.remove('scanning');
@@ -482,42 +440,22 @@
             }
         }
 
-        // Логика для модального окна
-        function openModal() {
-            document.getElementById('applyModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('applyModal').style.display = 'none';
-        }
+        function openModal() { document.getElementById('applyModal').style.display = 'block'; }
+        function closeModal() { document.getElementById('applyModal').style.display = 'none'; }
 
         async function submitApplication() {
             const agentAddr = document.getElementById('applyAgent').value.trim();
             const email = document.getElementById('applyEmail').value.trim();
-
-            if (!agentAddr || !email) {
-                alert("Please fill in both fields.");
-                return;
-            }
-
+            if (!agentAddr || !email) { alert("Please fill in both fields."); return; }
             try {
-                // Отправляем заявку на наш сервер (пока просто выводим в консоль)
-                // В будущем мы добавим этот эндпоинт в Python-агент
                 const response = await fetch('https://tally-assertive-peafowl.cloudpub.ru/apply', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ agent_address: agentAddr, email: email })
                 });
-
                 if (!response.ok) throw new Error('Failed to submit');
-                
                 alert("Application submitted successfully! We will contact you soon.");
                 closeModal();
-                
-            } catch (error) {
-                alert("Error submitting application. Please try again later.");
-                console.error(error);
-            }
+            } catch (error) { alert("Error submitting application. Please try again later."); }
         }
     </script>
 </body>
