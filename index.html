@@ -47,7 +47,6 @@
         .btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
         .btn-submit { background: #38bdf8; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         
-        /* Стили для витрины партнеров */
         .partners-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #1e293b; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
         .partners-title { font-size: 1.2rem; color: #e2e8f0; margin-bottom: 20px; font-weight: bold; }
         .partner-item { background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -95,7 +94,7 @@
 
             <div class="live-indicator">
                 <div class="dot"></div>
-                Scanner is live. 1,245 agents verified in database.
+                Scanner is live. <span id="agentCount">...</span> agents verified in database.
             </div>
 
             <div id="resultCard" class="result-card">
@@ -128,7 +127,6 @@
             <div class="partners-section">
                 <div class="partners-title">✅ Our Verified Partners</div>
                 <div id="partnersList">
-                    <!-- Здесь будут появляться проверенные агенты -->
                     <div class="partner-item">
                         <span class="partner-address">agent1q000rgplz6hf8r3d5x0pah85jhlsewan8ls99glwr6lzpgdy8yzns37nzw8</span>
                         <span class="partner-badge">✅ Verified</span>
@@ -158,6 +156,14 @@
     </div>
 
     <script>
+        // Получаем реальную статистику при загрузке страницы
+        fetch('https://tally-assertive-peafowl.cloudpub.ru/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('agentCount').innerText = data.count;
+            })
+            .catch(err => console.log('Stats error:', err));
+
         async function checkAgent() {
             const input = document.getElementById('agentInput').value.trim();
             const resultCard = document.getElementById('resultCard');
