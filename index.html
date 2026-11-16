@@ -52,6 +52,11 @@
         .partner-item { background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .partner-address { color: #94a3b8; font-size: 0.9rem; word-break: break-all; text-align: left; margin-right: 10px; }
         .partner-badge { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid #22c55e; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; }
+        
+        /* Стили для окна оплаты */
+        .payment-info { background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #334155; }
+        .payment-info p { margin: 5px 0; font-size: 0.9rem; color: #cbd5e1; }
+        .payment-info code { background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-family: monospace; }
     </style>
 </head>
 <body>
@@ -123,7 +128,6 @@
                 <button class="btn-dev" onclick="openModal()">Apply for Verification</button>
             </div>
 
-            <!-- Блок с проверенными партнерами -->
             <div class="partners-section">
                 <div class="partners-title">✅ Our Verified Partners</div>
                 <div id="partnersList">
@@ -151,6 +155,22 @@
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Cancel</button>
                 <button class="btn-submit" onclick="submitApplication()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Новое окно для оплаты -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2>Payment Required</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem;">To verify your agent, please send the following amount.</p>
+            <div class="payment-info">
+                <p><strong>Amount:</strong> <code id="payAmount"></code> FET</p>
+                <p><strong>Wallet Address:</strong><br><code id="payWallet" style="word-break: break-all;"></code></p>
+            </div>
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="btn-cancel" onclick="closePaymentModal()">Close</button>
+                <button class="btn-submit" onclick="paid()">I Have Paid</button>
             </div>
         </div>
     </div>
@@ -223,11 +243,22 @@
                 });
                 const data = await response.json();
                 
-                alert(`Application received!\n\nTo verify your agent, please send ${data.price} FET to:\n${data.wallet}\n\nAfter sending, contact us.`);
+                // Закрываем форму заявки и открываем окно оплаты
                 closeModal();
+                document.getElementById('payAmount').innerText = data.price;
+                document.getElementById('payWallet').innerText = data.wallet;
+                document.getElementById('paymentModal').style.display = 'block';
+                
             } catch (error) {
                 alert("Error submitting application.");
             }
+        }
+
+        function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
+        
+        function paid() {
+            alert("Thank you! Please wait for our team to verify your payment. We will contact you via email.");
+            closePaymentModal();
         }
     </script>
 </body>
