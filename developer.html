@@ -19,6 +19,17 @@
         .btn-primary { background: #38bdf8; color: #0f172a; }
         .btn-secondary { background: transparent; color: #38bdf8; border: 1px solid #38bdf8; }
         .hidden { display: none; }
+        
+        /* Стили для модального окна оплаты */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
+        .modal-content { background-color: #1e293b; margin: 15% auto; padding: 30px; border: 1px solid #334155; border-radius: 16px; width: 90%; max-width: 500px; text-align: left; }
+        .modal-content h2 { margin-top: 0; }
+        .payment-info { background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #334155; }
+        .payment-info p { margin: 5px 0; font-size: 0.9rem; color: #cbd5e1; }
+        .payment-info code { background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #38bdf8; font-family: monospace; word-break: break-all; }
+        .modal-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .btn-submit { background: #38bdf8; color: #0f172a; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -74,20 +85,34 @@
         </div>
     </div>
 
+    <!-- Модальное окно оплаты -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2>Payment Required</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem;">To proceed, please send the following amount.</p>
+            <div class="payment-info">
+                <p><strong>Service:</strong> <code id="payService"></code></p>
+                <p><strong>Amount:</strong> <code id="payAmount"></code></p>
+                <p><strong>Wallet Address:</strong><br><code id="payWallet"></code></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closePaymentModal()">Close</button>
+                <button class="btn-submit" onclick="paid()">I Have Paid</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Простая логика переключения экранов (без реального логина)
         function register() {
             const agent = document.getElementById('regAgent').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             if (!agent || !email) { alert("Please fill all fields."); return; }
 
-            // Отправляем на сервер (опционально)
             fetch('https://tally-assertive-peafowl.cloudpub.ru/register', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ agent_address: agent, email: email })
             }).catch(() => {});
 
-            // Показываем кабинет
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');
             document.getElementById('userEmail').innerText = email;
@@ -95,12 +120,29 @@
             document.getElementById('navStatus').innerText = "Logged In";
         }
 
-        function buyService(type) {
-            if (type === 'verification') {
-                alert("Please send 10 FET to: fetch10mdaxxzwgxxqf0qctqk4u8v3q99wg9tsfy7jt8\n\nAfter payment, we will verify your agent.");
-            } else {
-                alert("API Access costs 50 FET/month. Please contact us to set up your API key.");
+        async function buyService(type) {
+            try {
+                const response = await fetch('https://tally-assertive-peafowl.cloudpub.ru/get_price', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ service_type: type })
+                });
+                const data = await response.json();
+                
+                // Заполняем и показываем окно оплаты
+                document.getElementById('payService').innerText = data.service;
+                document.getElementById('payAmount').innerText = data.price + " FET";
+                document.getElementById('payWallet').innerText = data.wallet;
+                document.getElementById('paymentModal').style.display = 'block';
+                
+            } catch (error) {
+                alert("Error connecting to server.");
             }
+        }
+
+        function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
+        function paid() {
+            alert("Thank you! We will verify your payment shortly.");
+            closePaymentModal();
         }
     </script>
 </body>
