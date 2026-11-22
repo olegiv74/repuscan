@@ -6,9 +6,13 @@
     <title>RepuScanAI — AI Agent Security Check</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #0f172a; background-image: radial-gradient(#334155 1px, transparent 1px); background-size: 30px 30px; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; }
-        .navbar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; box-sizing: border-box; position: absolute; top: 0; left: 0; }
-        .nav-logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
+        .navbar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; box-sizing: border-box; position: absolute; top: 0; left: 0; z-index: 10; }
+        .nav-logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: bold; transition: color 0.3s; }
+        .nav-links a:hover { color: #38bdf8; }
         .btn-connect { background: transparent; color: #38bdf8; border: 1px solid #38bdf8; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; }
+        
         .main-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 40px; text-align: center; }
         .container { max-width: 800px; width: 100%; padding: 40px; box-sizing: border-box; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border-radius: 24px; border: 1px solid #1e293b; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .logo-container { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
@@ -38,7 +42,6 @@
         .dev-text { font-size: 0.95rem; color: #94a3b8; margin-bottom: 20px; }
         .btn-dev { background: transparent; color: #818cf8; border: 1px solid #818cf8; padding: 12px 25px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
         .footer { margin-top: 30px; font-size: 0.8rem; color: #475569; }
-        
         .partners-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #1e293b; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
         .partners-title { font-size: 1.2rem; color: #e2e8f0; margin-bottom: 20px; font-weight: bold; }
         .partner-item { background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -48,14 +51,18 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-logo">
+        <a href="index.html" class="nav-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M8 12L11 15L16 9" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             RepuScanAI
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="developer.html">For Developers</a>
         </div>
-        <a href="developer.html" class="btn-connect">For Developers</a>
     </nav>
 
     <div class="main-content">
@@ -129,13 +136,11 @@
     </div>
 
     <script>
-        // Загрузка статистики
         fetch('https://tally-assertive-peafowl.cloudpub.ru/stats')
             .then(response => response.json())
             .then(data => { document.getElementById('agentCount').innerText = data.count; })
             .catch(err => console.log('Stats error:', err));
 
-        // Загрузка витрины партнеров (динамически)
         fetch('https://tally-assertive-peafowl.cloudpub.ru/verified_partners')
             .then(response => response.json())
             .then(data => {
