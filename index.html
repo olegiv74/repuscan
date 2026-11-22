@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RepuScanAI — AI Agent Security Check</title>
     <style>
-        /* ... (стили остаются прежними, я не менял их, чтобы не загромождать ответ) ... */
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #0f172a; background-image: radial-gradient(#334155 1px, transparent 1px); background-size: 30px 30px; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; }
         .navbar { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; box-sizing: border-box; position: absolute; top: 0; left: 0; }
         .nav-logo { font-size: 1.5rem; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
@@ -39,6 +38,7 @@
         .dev-text { font-size: 0.95rem; color: #94a3b8; margin-bottom: 20px; }
         .btn-dev { background: transparent; color: #818cf8; border: 1px solid #818cf8; padding: 12px 25px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-block; }
         .footer { margin-top: 30px; font-size: 0.8rem; color: #475569; }
+        
         .partners-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #1e293b; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
         .partners-title { font-size: 1.2rem; color: #e2e8f0; margin-bottom: 20px; font-weight: bold; }
         .partner-item { background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -109,7 +109,6 @@
                 </div>
             </div>
 
-            <!-- Блок для разработчиков с одной кнопкой -->
             <div class="dev-section">
                 <div class="dev-title">Are you an AI Agent developer?</div>
                 <div class="dev-text">Get the RepuScan Verified badge to earn your clients' trust at first sight.</div>
@@ -119,10 +118,7 @@
             <div class="partners-section">
                 <div class="partners-title">✅ Our Verified Partners</div>
                 <div id="partnersList">
-                    <div class="partner-item">
-                        <span class="partner-address">agent1q000rgplz6hf8r3d5x0pah85jhlsewan8ls99glwr6lzpgdy8yzns37nzw8</span>
-                        <span class="partner-badge">✅ Verified</span>
-                    </div>
+                    <!-- Данные будут загружаться динамически -->
                 </div>
             </div>
 
@@ -133,10 +129,32 @@
     </div>
 
     <script>
+        // Загрузка статистики
         fetch('https://tally-assertive-peafowl.cloudpub.ru/stats')
             .then(response => response.json())
             .then(data => { document.getElementById('agentCount').innerText = data.count; })
             .catch(err => console.log('Stats error:', err));
+
+        // Загрузка витрины партнеров (динамически)
+        fetch('https://tally-assertive-peafowl.cloudpub.ru/verified_partners')
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('partnersList');
+                if (data.partners.length === 0) {
+                    list.innerHTML = '<p style="color: #94a3b8;">No verified partners yet.</p>';
+                } else {
+                    list.innerHTML = '';
+                    data.partners.forEach(p => {
+                        list.innerHTML += `
+                            <div class="partner-item">
+                                <span class="partner-address">${p.agent}</span>
+                                <span class="partner-badge">✅ Verified</span>
+                            </div>
+                        `;
+                    });
+                }
+            })
+            .catch(err => console.log('Partners error:', err));
 
         async function checkAgent() {
             const input = document.getElementById('agentInput').value.trim();
