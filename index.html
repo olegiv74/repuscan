@@ -136,12 +136,12 @@
     </div>
 
     <script>
-        fetch('https://tally-assertive-peafowl.cloudpub.ru/stats')
+        fetch('http://152.228.115.205:8001/stats')
             .then(response => response.json())
             .then(data => { document.getElementById('agentCount').innerText = data.count; })
             .catch(err => console.log('Stats error:', err));
 
-        fetch('https://tally-assertive-peafowl.cloudpub.ru/verified_partners')
+        fetch('http://152.228.115.205:8001/verified_partners')
             .then(response => response.json())
             .then(data => {
                 const list = document.getElementById('partnersList');
@@ -173,7 +173,7 @@
             verifiedBadge.style.display = 'none';
 
             try {
-                const response = await fetch('https://tally-assertive-peafowl.cloudpub.ru/check', {
+                const response = await fetch('http://152.228.115.205:8001/check', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ agent_address: input })
                 });
